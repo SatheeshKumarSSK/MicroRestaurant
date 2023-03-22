@@ -19,7 +19,7 @@ namespace Micro.Services.ProductAPI.Controllers
             _response = new ResponseDto();
         }
 
-        [HttpGet, Authorize]
+        [HttpGet]
         public async Task<ResponseDto> Get()
         {
             try
@@ -35,7 +35,7 @@ namespace Micro.Services.ProductAPI.Controllers
             return _response;
         }
 
-        [HttpGet, Route("{id}"), Authorize]
+        [HttpGet, Route("{id}")]
         public async Task<object> Get(int id)
         {
             try
