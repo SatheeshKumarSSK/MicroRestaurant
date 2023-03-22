@@ -1,5 +1,6 @@
 ﻿using Micro.Services.ProductAPI.DTOs;
 using Micro.Services.ProductAPI.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,7 +19,7 @@ namespace Micro.Services.ProductAPI.Controllers
             _response = new ResponseDto();
         }
 
-        [HttpGet]
+        [HttpGet, Authorize]
         public async Task<ResponseDto> Get()
         {
             try
@@ -34,7 +35,7 @@ namespace Micro.Services.ProductAPI.Controllers
             return _response;
         }
 
-        [HttpGet, Route("{id}")]
+        [HttpGet, Route("{id}"), Authorize]
         public async Task<object> Get(int id)
         {
             try
@@ -50,7 +51,7 @@ namespace Micro.Services.ProductAPI.Controllers
             return _response;
         }
 
-        [HttpPost]
+        [HttpPost, Authorize]
         public async Task<object> Post([FromBody] ProductDto productDto)
         {
             try
@@ -66,7 +67,7 @@ namespace Micro.Services.ProductAPI.Controllers
             return _response;
         }
 
-        [HttpPut]
+        [HttpPut, Authorize]
         public async Task<object> Put([FromBody] ProductDto productDto)
         {
             try
@@ -82,7 +83,7 @@ namespace Micro.Services.ProductAPI.Controllers
             return _response;
         }
 
-        [HttpDelete, Route("{id}")]
+        [HttpDelete, Route("{id}"), Authorize(Roles = "Admin")]
         public async Task<object> Delete(int id)
         {
             try
