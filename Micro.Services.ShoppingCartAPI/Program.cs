@@ -1,6 +1,7 @@
 using Micro.Services.ShoppingCartAPI.Data;
 using Micro.Services.ShoppingCartAPI.Helpers;
 using Micro.Services.ShoppingCartAPI.Interfaces;
+using Micro.Services.ShoppingCartAPI.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -16,7 +17,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 
-builder.Services.AddScoped<ICartRepository,ICartRepository>();
+builder.Services.AddScoped<ICartRepository, CartRepository>();
 
 builder.Services.AddControllers();
 
@@ -42,7 +43,7 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Micro.Services.ProductAPI", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Micro.Services.ShoppingCartAPI", Version = "v1" });
     c.EnableAnnotations();
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
