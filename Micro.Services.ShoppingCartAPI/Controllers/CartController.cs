@@ -67,11 +67,11 @@ namespace Micro.Services.ShoppingCartAPI.Controllers
         }
 
         [HttpPost("RemoveCart")]
-        public async Task<ResponseDto> RemoveCart([FromBody] int cartId)
+        public async Task<ResponseDto> RemoveCart([FromBody] int cartDetailId)
         {
             try
             {
-                bool isSuccess = await _cartRepository.RemoveFromCart(cartId);
+                bool isSuccess = await _cartRepository.RemoveFromCart(cartDetailId);
                 _response.Result = isSuccess;
             }
             catch (Exception ex)
