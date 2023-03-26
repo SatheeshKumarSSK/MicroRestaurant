@@ -1,5 +1,6 @@
 ﻿using Micro.Services.ShoppingCartAPI.DTOs;
 using Micro.Services.ShoppingCartAPI.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,7 +19,7 @@ namespace Micro.Services.ShoppingCartAPI.Controllers
             _response = new ResponseDto();
         }
 
-        [HttpGet("GetCart/{userId}")]
+        [HttpGet("GetCart/{userId}"), Authorize]
         public async Task<ResponseDto> GetCart(string userId)
         {
             try
@@ -34,7 +35,7 @@ namespace Micro.Services.ShoppingCartAPI.Controllers
             return _response;
         }
 
-        [HttpPost("AddCart")]
+        [HttpPost("AddCart"), Authorize]
         public async Task<ResponseDto> AddCart(CartDto cartDto)
         {
             try
@@ -50,7 +51,7 @@ namespace Micro.Services.ShoppingCartAPI.Controllers
             return _response;
         }
 
-        [HttpPut("UpdateCart")]
+        [HttpPut("UpdateCart"), Authorize]
         public async Task<ResponseDto> UpdateCart(CartDto cartDto)
         {
             try
@@ -66,7 +67,7 @@ namespace Micro.Services.ShoppingCartAPI.Controllers
             return _response;
         }
 
-        [HttpPost("RemoveCart")]
+        [HttpPost("RemoveCart"), Authorize]
         public async Task<ResponseDto> RemoveCart([FromBody] int cartDetailId)
         {
             try
