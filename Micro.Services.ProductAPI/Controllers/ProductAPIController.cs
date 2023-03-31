@@ -8,12 +8,12 @@ namespace Micro.Services.ProductAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductsController : ControllerBase
+    public class ProductAPIController : ControllerBase
     {
         private readonly IProductRepository _productRepository;
         protected ResponseDto _response;
 
-        public ProductsController(IProductRepository productRepository)
+        public ProductAPIController(IProductRepository productRepository)
         {
             _productRepository = productRepository;
             _response = new ResponseDto();

@@ -18,7 +18,7 @@ namespace Micro.Web.Services
             {
                 ApiType = SD.ApiType.POST,
                 Data = productDto,
-                Url = SD.ProductAPIBase + "/api/products",
+                Url = SD.ProductAPIBase + "/api/productAPI",
                 AccessToken = token
             });
         }
@@ -28,7 +28,7 @@ namespace Micro.Web.Services
             return await this.SendAsync<T>(new ApiRequest()
             {
                 ApiType = SD.ApiType.DELETE,
-                Url = SD.ProductAPIBase + "/api/products/" + id,
+                Url = SD.ProductAPIBase + "/api/productAPI/" + id,
                 AccessToken = token
             });
         }
@@ -38,7 +38,7 @@ namespace Micro.Web.Services
             return await this.SendAsync<T>(new ApiRequest()
             {
                 ApiType = SD.ApiType.GET,
-                Url = SD.ProductAPIBase + "/api/products",
+                Url = SD.ProductAPIBase + "/api/productAPI",
                 AccessToken = token
             });
         }
@@ -48,7 +48,7 @@ namespace Micro.Web.Services
             return await this.SendAsync<T>(new ApiRequest()
             {
                 ApiType = SD.ApiType.GET,
-                Url = SD.ProductAPIBase + "/api/products/" + id,
+                Url = SD.ProductAPIBase + "/api/productAPI/" + id,
                 AccessToken = token
             });
         }
@@ -59,7 +59,7 @@ namespace Micro.Web.Services
             {
                 ApiType = SD.ApiType.PUT,
                 Data = productDto,
-                Url = SD.ProductAPIBase + "/api/products",
+                Url = SD.ProductAPIBase + "/api/productAPI",
                 AccessToken = token
             });
         }

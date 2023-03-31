@@ -18,18 +18,16 @@ namespace Micro.Services.ShoppingCartAPI.Repository
             _mapper = mapper;
         }
 
-        public async Task<bool> ClearCart(string userId)
+        public async Task<CartDto> GetCartByUserId(string userId)
         {
-            CartHeader cartHeaderFromDb = await _context.CartHeaders.FirstOrDefaultAsync(c => c.UserId == userId);
-
-            if (cartHeaderFromDb != null)
+            Cart cart = new()
             {
-                _context.CartDetails.RemoveRange(_context.CartDetails.Where(c => c.CartHeaderId == cartHeaderFromDb.CartHeaderId));
-                _context.CartHeaders.Remove(cartHeaderFromDb);
-                await _context.SaveChangesAsync();
-                return true;
-            }
-            return false;
+                CartHeader = await _context.CartHeaders.FirstOrDefaultAsync(c => c.UserId == userId)
+            };
+
+            cart.CartDetails = _context.CartDetails.Where(c => c.CartHeaderId == cart.CartHeader.CartHeaderId).Include(p => p.Product);
+
+            return _mapper.Map<CartDto>(cart);
         }
 
         public async Task<CartDto> CreateUpdateCart(CartDto cartDto)
@@ -72,30 +70,17 @@ namespace Micro.Services.ShoppingCartAPI.Repository
                     //create detail
                     cart.CartDetails.FirstOrDefault().CartHeaderId = cartHeaderFromDb.CartHeaderId;
                     cart.CartDetails.FirstOrDefault().Product = null;
-                    await _context.AddAsync(cart.CartDetails.FirstOrDefault());
+                    await _context.CartDetails.AddAsync(cart.CartDetails.FirstOrDefault());
                     await _context.SaveChangesAsync();
                 }
                 else
                 {
                     //if it has then update the count / cart details
-                    cart.CartDetails.FirstOrDefault().Product = null;
-                    cart.CartDetails.FirstOrDefault().Count += cartDetailFromDb.Count;
-                    _context.Update(cart.CartDetails.FirstOrDefault());
+                    cartDetailFromDb.Count += cart.CartDetails.FirstOrDefault().Count;
+                    _context.CartDetails.Update(cartDetailFromDb);
                     await _context.SaveChangesAsync();
                 }
             }
-
-            return _mapper.Map<CartDto>(cart);
-        }
-
-        public async Task<CartDto> GetCartByUserId(string userId)
-        {
-            Cart cart = new()
-            {
-                CartHeader = await _context.CartHeaders.FirstOrDefaultAsync(c => c.UserId == userId)
-            };
-
-            cart.CartDetails = _context.CartDetails.Where(c => c.CartHeaderId == cart.CartHeader.CartHeaderId).Include(p => p.Product);
 
             return _mapper.Map<CartDto>(cart);
         }
@@ -124,6 +109,36 @@ namespace Micro.Services.ShoppingCartAPI.Repository
             {
                 return false;
             }
+        }
+
+        public async Task<bool> ClearCart(string userId)
+        {
+            CartHeader cartHeaderFromDb = await _context.CartHeaders.FirstOrDefaultAsync(c => c.UserId == userId);
+
+            if (cartHeaderFromDb != null)
+            {
+                _context.CartDetails.RemoveRange(_context.CartDetails.Where(c => c.CartHeaderId == cartHeaderFromDb.CartHeaderId));
+                _context.CartHeaders.Remove(cartHeaderFromDb);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            return false;
+        }
+
+        public async Task<bool> ApplyCoupon(string userId, string couponCode)
+        {
+            var cartHeader = await _context.CartHeaders.FirstOrDefaultAsync(c => c.UserId == userId);
+            cartHeader.CouponCode = couponCode;
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> RemoveCoupon(string userId)
+        {
+            var cartHeader = await _context.CartHeaders.FirstOrDefaultAsync(c => c.UserId == userId);
+            cartHeader.CouponCode = "";
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }

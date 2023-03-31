@@ -9,12 +9,12 @@ namespace Micro.Services.CouponAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CouponController : ControllerBase
+    public class CouponAPIController : ControllerBase
     {
         private readonly ICouponRepository _couponRepository;
         protected ResponseDto _response;
 
-        public CouponController(ICouponRepository couponRepository)
+        public CouponAPIController(ICouponRepository couponRepository)
         {
             _couponRepository = couponRepository;
             _response = new ResponseDto();

@@ -33,12 +33,12 @@ namespace Micro.Web.Controllers
             return View(list);
         }
 
-        [Authorize]
         public async Task<IActionResult> Details(int productId)
         {
             ProductDto product = new();
+            var accessToken = await HttpContext.GetTokenAsync("access_token");
             var response = await _productService.GetProductByIdAsync<ResponseDto>(productId, "");
-            if (response != null && response.IsSuccess)
+            if (response.Result != null && response.IsSuccess)
             {
                 product = JsonConvert.DeserializeObject<ProductDto>(Convert.ToString(response.Result));
             }
