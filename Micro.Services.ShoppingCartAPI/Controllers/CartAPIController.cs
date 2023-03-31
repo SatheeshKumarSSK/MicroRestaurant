@@ -1,5 +1,6 @@
 ﻿using Micro.Services.ShoppingCartAPI.DTOs;
 using Micro.Services.ShoppingCartAPI.Interfaces;
+using Micro.Services.ShoppingCartAPI.Messages;
 using Micro.Services.ShoppingCartAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -107,6 +108,27 @@ namespace Micro.Services.ShoppingCartAPI.Controllers
             {
                 bool isSuccess = await _cartRepository.RemoveCoupon(userId);
                 _response.Result = isSuccess;
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+            }
+            return _response;
+        }
+
+        [HttpPost("Checkout"), Authorize]
+        public async Task<object> Checkout(CheckoutHeaderDto checkoutHeader)
+        {
+            try
+            {
+                CartDto cart = await _cartRepository.GetCartByUserId(checkoutHeader.UserId);
+                if(cart == null)
+                {
+                    return BadRequest();
+                }
+                checkoutHeader.CartDetails = cart.CartDetails;
+                //logic to add message to process order.
             }
             catch (Exception ex)
             {

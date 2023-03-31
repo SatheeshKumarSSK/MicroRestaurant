@@ -36,7 +36,7 @@
                         </div>
                         <div class="col-12">
                             <label class="col-form-label">PickUp Time</label>
-                            <input asp-for="CartHeader.PickupDateTime" class="form-control" type="date">
+                            <input asp-for="CartHeader.PickupDateTime" class="form-control form_datetime" type="text">
                         </div>
                         <div class="col-12">
                             <label class="col-form-label">Card Number :</label>
@@ -120,11 +120,11 @@
     </form>
 }
 
-@*@section Scripts{
+@section Scripts{
     <script type="text/javascript">
         $(document).ready(function () {
             $(".form_datetime").datetimepicker({ format: 'yyyy-mm-dd hh:ii' });
             $('.form_datetime').datetimepicker('setStartDate', new Date());
         });
     </script>
-}*@
+}

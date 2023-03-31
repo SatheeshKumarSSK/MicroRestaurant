@@ -76,5 +76,16 @@ namespace Micro.Web.Services
                 AccessToken = token
             });
         }
+
+        public async Task<T> Checkout<T>(CartHeaderDto cartHeaderDto, string token)
+        {
+            return await this.SendAsync<T>(new ApiRequest()
+            {
+                ApiType = SD.ApiType.POST,
+                Data = cartHeaderDto,
+                Url = SD.ShoppingCartAPIBase + "/api/cartAPI/Checkout",
+                AccessToken = token
+            });
+        }
     }
 }

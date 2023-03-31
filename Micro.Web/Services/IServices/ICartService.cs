@@ -10,5 +10,6 @@ namespace Micro.Web.Services.IServices
         Task<T> RemoveFromCartAsync<T>(int cartDetailId, string token);
         Task<T> ApplyCoupon<T>(CartDto cartDto, string token);
         Task<T> RemoveCoupon<T>(string userId, string token);
+        Task<T> Checkout<T>(CartHeaderDto cartHeaderDto, string token);
     }
 }
