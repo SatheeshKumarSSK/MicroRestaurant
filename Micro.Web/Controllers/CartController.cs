@@ -63,7 +63,6 @@ namespace Micro.Web.Controllers
             return View();
         }
 
-        [HttpGet]
         public async Task<IActionResult> Checkout()
         {
             return View(await LoadCartBasedOnLoggedInUser());
@@ -84,8 +83,7 @@ namespace Micro.Web.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Confirmation()
+        public IActionResult Confirmation()
         {
             return View();
         }

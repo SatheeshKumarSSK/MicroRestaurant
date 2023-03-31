@@ -1,4 +1,5 @@
-﻿using Micro.Services.ShoppingCartAPI.DTOs;
+﻿using Micro.MessageBus;
+using Micro.Services.ShoppingCartAPI.DTOs;
 using Micro.Services.ShoppingCartAPI.Interfaces;
 using Micro.Services.ShoppingCartAPI.Messages;
 using Micro.Services.ShoppingCartAPI.Models;
@@ -13,11 +14,15 @@ namespace Micro.Services.ShoppingCartAPI.Controllers
     public class CartAPIController : ControllerBase
     {
         private readonly ICartRepository _cartRepository;
+        private readonly IMessageBus _messageBus;
+        private readonly IConfiguration _config;
         protected ResponseDto _response;
 
-        public CartAPIController(ICartRepository cartRepository)
+        public CartAPIController(ICartRepository cartRepository, IMessageBus messageBus, IConfiguration config)
         {
             _cartRepository = cartRepository;
+            _messageBus = messageBus;
+            _config = config;
             _response = new ResponseDto();
         }
 
@@ -123,12 +128,13 @@ namespace Micro.Services.ShoppingCartAPI.Controllers
             try
             {
                 CartDto cart = await _cartRepository.GetCartByUserId(checkoutHeader.UserId);
-                if(cart == null)
+                if (cart == null)
                 {
                     return BadRequest();
                 }
                 checkoutHeader.CartDetails = cart.CartDetails;
-                //logic to add message to process order.
+                //logic to add message to process order
+                await _messageBus.PublishMessage(checkoutHeader, _config["ServiceBus:TopicName"]);
             }
             catch (Exception ex)
             {

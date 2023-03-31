@@ -103,7 +103,6 @@ namespace Micro.Web.Controllers
             return SignOut("Cookies", "oidc");
         }
 
-        [HttpGet]
         public IActionResult AccessDenied()
         {
             return View();

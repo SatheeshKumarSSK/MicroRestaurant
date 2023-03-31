@@ -1,8 +1,9 @@
-﻿using Micro.Services.ShoppingCartAPI.DTOs;
+﻿using Micro.MessageBus;
+using Micro.Services.ShoppingCartAPI.DTOs;
 
 namespace Micro.Services.ShoppingCartAPI.Messages
 {
-    public class CheckoutHeaderDto
+    public class CheckoutHeaderDto : BaseMessage
     {
         public int CartHeaderId { get; set; }
         public string UserId { get; set; }
