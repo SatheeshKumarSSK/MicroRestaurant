@@ -1,10 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Micro.Web.Models
+﻿namespace Micro.Services.OrderAPI.Messages
 {
-    public class CartHeaderDto
+    public class CheckoutHeaderDto
     {
-        [Key]
         public int CartHeaderId { get; set; }
         public string UserId { get; set; }
         public string CouponCode { get; set; }
@@ -18,5 +15,7 @@ namespace Micro.Web.Models
         public string CardNumber { get; set; }
         public string CVV { get; set; }
         public string ExpiryMonthYear { get; set; }
+        public int CartTotalItems { get; set; }
+        public IEnumerable<CartDetailDto> CartDetails { get; set; }
     }
 }
