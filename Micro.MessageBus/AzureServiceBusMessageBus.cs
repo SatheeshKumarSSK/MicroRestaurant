@@ -10,7 +10,7 @@ namespace Micro.MessageBus
 {
     public class AzureServiceBusMessageBus : IMessageBus
     {
-        private string connectionString = "";
+        private string connectionString = "Endpoint=sb://microrestaurants.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=fSnURFlleSaUDrKG6Ktj2OhkFvp3Qp0gh+ASbC1eQ0k=";
 
         public async Task PublishMessage(BaseMessage message, string topicName)
         {

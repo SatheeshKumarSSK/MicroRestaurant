@@ -16,13 +16,15 @@ namespace Micro.Services.ShoppingCartAPI.Controllers
         private readonly ICartRepository _cartRepository;
         private readonly IMessageBus _messageBus;
         private readonly IConfiguration _config;
+        private readonly ICouponRepository _couponRepository;
         protected ResponseDto _response;
 
-        public CartAPIController(ICartRepository cartRepository, IMessageBus messageBus, IConfiguration config)
+        public CartAPIController(ICartRepository cartRepository, IMessageBus messageBus, IConfiguration config, ICouponRepository couponRepository)
         {
             _cartRepository = cartRepository;
             _messageBus = messageBus;
             _config = config;
+            _couponRepository = couponRepository;
             _response = new ResponseDto();
         }
 
@@ -132,6 +134,20 @@ namespace Micro.Services.ShoppingCartAPI.Controllers
                 {
                     return BadRequest();
                 }
+
+                if (!string.IsNullOrEmpty(checkoutHeader.CouponCode))
+                {
+                    Request.Headers.TryGetValue("Authorization", out var token);
+                    CouponDto coupon = await _couponRepository.GetCoupon(checkoutHeader.CouponCode, token);
+                    if (checkoutHeader.DiscountTotal != coupon.DiscountAmount)
+                    {
+                        _response.IsSuccess = false;
+                        _response.ErrorMessages = new List<string>() { "Coupon Price has changed, please confirm" };
+                        _response.DisplayMessage = "Coupon Price has changed, please confirm";
+                        return _response;
+                    }
+                }
+
                 checkoutHeader.CartDetails = cart.CartDetails;
                 //logic to add message to process order
                 await _messageBus.PublishMessage(checkoutHeader, _config["ServiceBus:TopicName"]);

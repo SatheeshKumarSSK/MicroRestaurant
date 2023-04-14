@@ -20,9 +20,14 @@ builder.Services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 
 builder.Services.AddScoped<ICartRepository, CartRepository>();
 
+builder.Services.AddScoped<ICouponRepository, CouponRepository>();
+
 builder.Services.AddSingleton<IMessageBus, AzureServiceBusMessageBus>();
 
 builder.Services.AddControllers();
+
+builder.Services.AddHttpClient<ICouponRepository, CouponRepository>
+    (h => h.BaseAddress = new Uri(builder.Configuration["ServiceUrls:CouponAPI"]));
 
 builder.Services.AddEndpointsApiExplorer();
 
