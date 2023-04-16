@@ -22,7 +22,7 @@ builder.Services.AddScoped<ICartRepository, CartRepository>();
 
 builder.Services.AddScoped<ICouponRepository, CouponRepository>();
 
-builder.Services.AddSingleton<IMessageBus, AzureServiceBusMessageBus>();
+builder.Services.AddSingleton<IMessageBus, MessageBus>();
 
 builder.Services.AddControllers();
 

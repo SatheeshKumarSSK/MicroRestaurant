@@ -1,14 +1,14 @@
-﻿using Micro.Services.OrderAPI.Messaging;
+﻿using Micro.Services.PaymentAPI.Messaging;
 
-namespace Micro.Services.OrderAPI.Extensions
+namespace Micro.Services.PaymentAPI.Extensions
 {
     public static class ApplicationBuilderExtensions
     {
-        public static IAzureServiceBusConsumerOrder ServiceBusConsumer { get; set; }
+        public static IAzureServiceBusConsumerPayment ServiceBusConsumer { get; set; }
 
         public static IApplicationBuilder UseAzureServiceBusConsumer(this IApplicationBuilder app)
         {
-            ServiceBusConsumer = app.ApplicationServices.GetService<IAzureServiceBusConsumerOrder>();
+            ServiceBusConsumer = app.ApplicationServices.GetService<IAzureServiceBusConsumerPayment>();
             var hostApplicationLife = app.ApplicationServices.GetService<IHostApplicationLifetime>();
 
             hostApplicationLife.ApplicationStarted.Register(OnStart);

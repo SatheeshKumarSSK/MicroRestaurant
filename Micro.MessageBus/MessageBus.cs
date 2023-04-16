@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Micro.MessageBus
 {
-    public class AzureServiceBusMessageBus : IMessageBus
+    public class MessageBus : IMessageBus
     {
         private string connectionString = "Endpoint=sb://microrestaurants.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=fSnURFlleSaUDrKG6Ktj2OhkFvp3Qp0gh+ASbC1eQ0k=";
 

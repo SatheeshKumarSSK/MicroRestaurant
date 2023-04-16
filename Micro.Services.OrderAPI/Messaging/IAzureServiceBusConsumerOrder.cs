@@ -1,6 +1,6 @@
 ﻿namespace Micro.Services.OrderAPI.Messaging
 {
-    public interface IAzureServiceBusConsumer
+    public interface IAzureServiceBusConsumerOrder
     {
         public Task Start();
         public Task Stop();

@@ -1,3 +1,4 @@
+using Micro.MessageBus;
 using Micro.Services.OrderAPI.Data;
 using Micro.Services.OrderAPI.Extensions;
 using Micro.Services.OrderAPI.Helpers;
@@ -25,7 +26,9 @@ var optionBuilder = new DbContextOptionsBuilder<DataContext>();
 optionBuilder.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 builder.Services.AddSingleton(new OrderRepository(optionBuilder.Options));
 
-builder.Services.AddSingleton<IAzureServiceBusConsumer, AzureServiceBusConsumer>();
+builder.Services.AddSingleton<IAzureServiceBusConsumerOrder, AzureServiceBusConsumerOrder>();
+
+builder.Services.AddSingleton<IMessageBus, MessageBus>();
 
 builder.Services.AddControllers();
 
