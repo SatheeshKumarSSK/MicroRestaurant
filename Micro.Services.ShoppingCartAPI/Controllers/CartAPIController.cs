@@ -150,7 +150,7 @@ namespace Micro.Services.ShoppingCartAPI.Controllers
 
                 checkoutHeader.CartDetails = cart.CartDetails;
                 //logic to add message to process order
-                await _messageBus.PublishMessage(checkoutHeader, _config["ServiceBus:TopicName"]);
+                await _messageBus.PublishMessage(checkoutHeader, _config["ServiceBus:QueueName"]);
                 await _cartRepository.ClearCart(checkoutHeader.UserId);
             }
             catch (Exception ex)

@@ -15,6 +15,7 @@ namespace Micro.Services.OrderAPI.Messaging
         private readonly string serviceBusConnectionString;
         private readonly string checkoutMessageTopic;
         private readonly string subscriptionCheckout;
+        private readonly string checkoutQueue;
         private readonly string orderPaymentProcessTopic;
         private readonly string orderUpdatePaymentResultTopic;
 
@@ -37,12 +38,13 @@ namespace Micro.Services.OrderAPI.Messaging
             serviceBusConnectionString = _config.GetValue<string>("ServiceBus:ServiceBusConnectionString");
             checkoutMessageTopic = _config.GetValue<string>("ServiceBus:CheckoutMessageTopic");
             subscriptionCheckout = _config.GetValue<string>("ServiceBus:CheckoutSubscription");
+            checkoutQueue = _config.GetValue<string>("ServiceBus:CheckoutQueue");
             orderPaymentProcessTopic = _config.GetValue<string>("ServiceBus:OrderPaymentProcessTopic");
             orderUpdatePaymentResultTopic = _config.GetValue<string>("ServiceBus:OrderUpdatePaymentResultTopic");
 
             var client = new ServiceBusClient(serviceBusConnectionString);
 
-            checkOutProcessor = client.CreateProcessor(checkoutMessageTopic, subscriptionCheckout);
+            checkOutProcessor = client.CreateProcessor(checkoutQueue);
             orderUpdatePaymentStatusProcessor = client.CreateProcessor(orderUpdatePaymentResultTopic, subscriptionCheckout);
         }
 
@@ -108,7 +110,8 @@ namespace Micro.Services.OrderAPI.Messaging
                 CVV = orderHeader.CVV,
                 ExpiryMonthYear = orderHeader.ExpiryMonthYear,
                 OrderId = orderHeader.OrderHeaderId,
-                OrderTotal = orderHeader.OrderTotal
+                OrderTotal = orderHeader.OrderTotal,
+                Email = orderHeader.Email
             };
 
             try
