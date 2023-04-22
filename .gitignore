@@ -475,3 +475,7 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+/Micro.Web/appsettings.json
+/Micro.Services.PaymentAPI/appsettings.json
+/Micro.Services.EmailAPI/appsettings.json
+/Micro.Services.OrderAPI/appsettings.json
