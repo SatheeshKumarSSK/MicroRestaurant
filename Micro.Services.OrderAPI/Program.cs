@@ -1,9 +1,11 @@
 using Micro.MessageBus;
+using Micro.Services.EmailAPI.Messaging;
 using Micro.Services.OrderAPI.Data;
 using Micro.Services.OrderAPI.Extensions;
 using Micro.Services.OrderAPI.Helpers;
 using Micro.Services.OrderAPI.Interfaces;
 using Micro.Services.OrderAPI.Messaging;
+using Micro.Services.OrderAPI.RabbitMQSender;
 using Micro.Services.OrderAPI.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -26,9 +28,15 @@ var optionBuilder = new DbContextOptionsBuilder<DataContext>();
 optionBuilder.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 builder.Services.AddSingleton(new OrderRepository(optionBuilder.Options));
 
+builder.Services.AddHostedService<RabbitMQCheckoutConsumer>();
+
+builder.Services.AddHostedService<RabbitMQPaymentConsumer>();
+
 builder.Services.AddSingleton<IAzureServiceBusConsumerOrder, AzureServiceBusConsumerOrder>();
 
 builder.Services.AddSingleton<IMessageBus, MessageBus>();
+
+builder.Services.AddSingleton<IRabbitMQOrderMessageSender, RabbitMQOrderMessageSender>();
 
 builder.Services.AddControllers();
 

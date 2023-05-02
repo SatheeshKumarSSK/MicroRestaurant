@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Micro.MessageBus;
+using Micro.Services.ShoppingCartAPI.RabbitMQSender;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,8 @@ builder.Services.AddScoped<ICartRepository, CartRepository>();
 builder.Services.AddScoped<ICouponRepository, CouponRepository>();
 
 builder.Services.AddSingleton<IMessageBus, MessageBus>();
+
+builder.Services.AddSingleton<IRabbitMQCartMessageSender, RabbitMQCartMessageSender>();
 
 builder.Services.AddControllers();
 

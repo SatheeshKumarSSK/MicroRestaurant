@@ -3,6 +3,7 @@ using Micro.Services.ShoppingCartAPI.DTOs;
 using Micro.Services.ShoppingCartAPI.Interfaces;
 using Micro.Services.ShoppingCartAPI.Messages;
 using Micro.Services.ShoppingCartAPI.Models;
+using Micro.Services.ShoppingCartAPI.RabbitMQSender;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,14 +18,16 @@ namespace Micro.Services.ShoppingCartAPI.Controllers
         private readonly IMessageBus _messageBus;
         private readonly IConfiguration _config;
         private readonly ICouponRepository _couponRepository;
+        private readonly IRabbitMQCartMessageSender _rabbitMQCartMessageSender;
         protected ResponseDto _response;
 
-        public CartAPIController(ICartRepository cartRepository, IMessageBus messageBus, IConfiguration config, ICouponRepository couponRepository)
+        public CartAPIController(ICartRepository cartRepository, IMessageBus messageBus, IConfiguration config, ICouponRepository couponRepository, IRabbitMQCartMessageSender rabbitMQCartMessageSender)
         {
             _cartRepository = cartRepository;
             _messageBus = messageBus;
             _config = config;
             _couponRepository = couponRepository;
+            _rabbitMQCartMessageSender = rabbitMQCartMessageSender;
             _response = new ResponseDto();
         }
 
@@ -150,7 +153,10 @@ namespace Micro.Services.ShoppingCartAPI.Controllers
 
                 checkoutHeader.CartDetails = cart.CartDetails;
                 //logic to add message to process order
-                await _messageBus.PublishMessage(checkoutHeader, _config["ServiceBus:QueueName"]);
+                //await _messageBus.PublishMessage(checkoutHeader, _config["ServiceBus:QueueName"]);
+
+                //rabbitMQ
+                _rabbitMQCartMessageSender.SendMessage(checkoutHeader, _config["RabbitMQ:CheckoutQueue"]);
                 await _cartRepository.ClearCart(checkoutHeader.UserId);
             }
             catch (Exception ex)

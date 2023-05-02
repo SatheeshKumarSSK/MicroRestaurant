@@ -1,17 +1,23 @@
 using Micro.MessageBus;
+using Micro.Services.OrderAPI.Messaging;
 using Micro.Services.PaymentAPI.Extensions;
 using Micro.Services.PaymentAPI.Messaging;
+using Micro.Services.PaymentAPI.RabbitMQSender;
 using PaymentProcessor;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddHostedService<RabbitMQPaymentConsumer>();
+
 builder.Services.AddSingleton<IProcessPayment, ProcessPayment>();
 
 builder.Services.AddSingleton<IAzureServiceBusConsumerPayment, AzureServiceBusConsumerPayment>();
 
 builder.Services.AddSingleton<IMessageBus, MessageBus>();
+
+builder.Services.AddSingleton<IRabbitMQPaymentMessageSender, RabbitMQPaymentMessageSender>();
 
 builder.Services.AddControllers();
 

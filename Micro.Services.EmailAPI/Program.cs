@@ -18,6 +18,8 @@ var optionBuilder = new DbContextOptionsBuilder<DataContext>();
 optionBuilder.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 builder.Services.AddSingleton(new EmailRepository(optionBuilder.Options));
 
+builder.Services.AddHostedService<RabbitMQPaymentConsumer>();
+
 builder.Services.AddSingleton<IAzureServiceBusConsumerEmail, AzureServiceBusConsumerEmail>();
 
 builder.Services.AddControllers();
